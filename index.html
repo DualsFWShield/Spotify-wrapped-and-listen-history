@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify History Analysis</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Helper Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Header / Nav -->
+        <header class="main-header">
+            <div class="logo-area">
+                <i class="fab fa-spotify fa-2x"></i>
+                <h1>History Wrapped</h1>
+            </div>
+            <div class="header-actions">
+                <button class="pill-btn-action sec" id="exportImageBtn"><i class="fas fa-download"></i> Save as Image</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content-area">
+            
+            <!-- Upload Hero -->
+            <div id="uploadSection" class="upload-hero">
+                <div class="hero-content">
+                    <h2 class="hero-title">Your Streaming Stats</h2>
+                    <p class="hero-sub">Drop your Spotify JSON files here to visualize your music journey.</p>
+                    
+                    <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Select or Drop JSON</span>
+                    </div>
+                    <input type="file" id="fileInput" accept=".json" class="d-none"/>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="dashboard-grid hidden">
+                
+                <!-- Filters Bar -->
+                <div class="filter-bar glass-panel">
+                    <div class="filter-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="artistFilter" placeholder="Filter by Artist...">
+                    </div>
+                    <div class="filter-group">
+                        <label>From</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>To</label>
+                        <input type="date" id="endDate">
+                    </div>
+                    <button id="applyFiltersBtn" class="pill-btn-action">Update</button>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-row">
+                    <div class="kpi-card gradient-1">
+                        <div class="kpi-icon"><i class="far fa-clock"></i></div>
+                        <div class="kpi-data">
+                            <span id="totalHours" class="kpi-value">0</span>
+                            <span class="kpi-label">Hours Listened</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card gradient-2">
+                        <div class="kpi-icon"><i class="fas fa-music"></i></div>
+                        <div class="kpi-data">
+                            <span id="totalPlays" class="kpi-value">0</span>
+                            <span class="kpi-label">Total Streams</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card gradient-3">
+                        <div class="kpi-icon"><i class="fas fa-crown"></i></div>
+                        <div class="kpi-data">
+                            <span id="topArtist" class="kpi-value text-truncate">N/A</span>
+                            <span class="kpi-label">Top Artist</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid (Moved Up) -->
+                <div class="charts-grid">
+                    
+                    <!-- Monthly Activity -->
+                    <div class="chart-card wide">
+                        <h3>Activity Overview</h3>
+                        <div class="chart-box-lg">
+                            <canvas id="listeningTimeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Layout 2 cols -->
+                    <div class="chart-card">
+                        <h3>Top Artists</h3>
+                        <div class="chart-box">
+                            <canvas id="artistDistributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>24h Clock</h3>
+                        <div class="chart-box">
+                            <canvas id="hourOfDayChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card wide">
+                        <h3>Weekly Pattern</h3>
+                        <div class="chart-box">
+                            <canvas id="dayOfWeekChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- History List -->
+                    <div class="chart-card wide history-panel">
+                        <div class="panel-header">
+                            <h3>Listening History</h3>
+                        </div>
+                        <div class="history-list-header">
+                            <span class="col-date" style="padding-left:10px;">When</span>
+                            <span class="col-track">Track</span>
+                            <span class="col-artist">Artist</span>
+                        </div>
+                        <div id="historyList" class="history-scroll-area">
+                            <!-- JS Injected -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Advanced Stats Grid (Moved Down) -->
+                <div class="advanced-stats-container">
+                    <h3>Insights & Analytics</h3>
+                    <div id="advancedStatsGrid" class="stats-grid">
+                        <!-- JS Injected -->
+                    </div>
+                </div>
+                
+                <!-- Side Panel: Top Tracks -->
+                <div class="side-ranking">
+                    <div class="chart-card h-100">
+                        <h3>Top 10 Tracks</h3>
+                        <ul id="topTracksList" class="ranking-list">
+                            <!-- JS Injected -->
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
