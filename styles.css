@@ -284,23 +284,37 @@ body {
     margin-top: 5px;
 }
 
-/* Charts Area: Intelligent Grid which allows side-by-side when space permits */
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 20px;
+/* Chart Containers - Dynamic Height */
+.chart-box {
+    position: relative;
+    /* Remove aspect ratio to allow natural height based on content */
+    height: 250px;
+    /* Fixed reasonable height for square-ish charts */
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-@media (max-width: 768px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
+/* On PC, reducing the height to remove 'blank space' */
+.chart-box canvas {
+    max-height: 100% !important;
+    max-width: 100% !important;
+}
+
+.chart-box-lg {
+    position: relative;
+    height: 250px;
+    /* Reduced from 300px */
+    width: 100%;
 }
 
 .chart-card {
-    background: var(--bg-card);
+    background-color: #181818;
     border-radius: var(--border-radius);
-    padding: 20px;
+    padding: 15px;
+    /* Reduced padding */
     transition: background 0.2s;
 }
 
@@ -710,154 +724,118 @@ body {
 /* --- MOBILE RESPONSIVENESS (Phone Optimization) --- */
 @media (max-width: 768px) {
     .app-container {
-        padding: 15px;
-        /* Reduce padding */
+        padding: 10px;
+        /* Minimal padding */
     }
 
     .hero-title {
-        font-size: 1.5rem;
-        /* Smaller Header */
+        font-size: 1.4rem;
         margin-bottom: 5px;
     }
 
-    .hero-sub {
-        font-size: 0.8rem;
-    }
-
     .section-title {
-        font-size: 1.1rem;
-        margin: 25px 0 10px 0;
+        font-size: 1rem;
+        margin: 20px 0 10px 0;
     }
 
-    /* KPI: 2 columns on phone to save vertical space? 
-       User said "ugly", often 1 col is too tall. 
-       Let's try compact 1 col or 2 col grid. */
+    /* KPI Row: Dense Grid */
     .kpi-row {
         grid-template-columns: 1fr 1fr;
-        /* Side-by-side KPIs on phone */
-        gap: 10px;
+        /* Force 2 columns */
+        gap: 8px;
     }
 
+    /* KPI Card: Compact */
     .kpi-card {
-        padding: 15px;
+        padding: 10px;
+        gap: 5px;
         flex-direction: column;
-        /* Stack Icon/Text inside card for space */
         text-align: center;
-        gap: 10px;
+        min-height: 0;
+        /* Remove any defaults */
     }
 
     .kpi-icon {
-        font-size: 1.5rem;
+        display: none;
     }
 
+    /* Hide icon on mobile to save space? Or make small */
+    /* Let's keep icon but small */
+    /* .kpi-icon { font-size: 1rem; } */
+
     .kpi-value {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
     }
 
     .kpi-label {
-        font-size: 0.7rem;
+        font-size: 0.6rem;
+        letter-spacing: 0;
     }
 
-    /* Filter Bar Column Stack */
+    /* Filter Bar */
     .filter-bar {
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
     }
 
     .filter-input,
     .date-input,
     .btn-spotify {
         width: 100%;
+        padding: 8px;
+        font-size: 0.8rem;
     }
 
-    /* Charts Grid: Allow side-by-side on mobile for density */
+    /* Chart Cards: Super Compact */
+    .chart-card {
+        padding: 10px;
+        /* Reduced internal padding */
+    }
+
+    /* Headers */
+    .chart-card h3 {
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+
+    /* Charts Grid: 2 cols for density */
     .charts-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 8px;
     }
 
-    /* Make wide charts (Activity, History) span full width */
+    /* Wide charts */
     .chart-card.wide {
         grid-column: 1 / -1;
     }
 
-    /* Chart Cards: Significantly reduce height on mobile for compactness */
-    .chart-container {
-        height: 180px;
-    }
-
-    /* Was 250px */
+    /* Explicit Heights for Chart Canvases on Mobile */
     .chart-box {
-        height: 200px;
-        padding: 5px;
+        height: 140px;
+        /* Very short */
+        min-height: 0;
+        padding: 0;
     }
 
-    /* Wrapper alignment */
-
-    .chart-container-lg {
-        height: 220px;
-    }
-
-    /* Activity Overview compact */
     .chart-box-lg {
-        height: 240px;
-        padding: 5px;
+        height: 180px;
+        padding: 0;
     }
 
-    /* Compact Typography on Mobile */
-    h3 {
-        font-size: 1rem;
-        margin-bottom: 10px;
-    }
-
-    /* Adjust History columns on small screens */
+    /* History List */
     .history-item {
-        grid-template-columns: 1fr;
-        gap: 5px;
-        padding: 5px 10px;
+        padding: 5px;
+        font-size: 0.8rem;
     }
 
-    .history-time {
-        font-size: 0.65rem;
-        color: #666;
-    }
-
-    .history-details-col {
-        font-size: 0.85rem;
-    }
-
-    .history-artist-col {
-        font-size: 0.75rem;
-        color: var(--spotify-green);
-    }
-
-    /* Hide Table Headers for history in mobile view as we changed to stack */
     .history-list-header {
         display: none;
     }
 }
 
 @media (max-width: 480px) {
-    /* On VERY small screens, maybe stack charts again? 
-       Or keep 2-col but really small. Let's keep 2-col as requested for density 
-       unless it breaks. 1fr 1fr on 360px is 180px wide. enough for pie chart. */
-
-    .kpi-row {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .kpi-card {
-        padding: 10px;
-        gap: 5px;
-    }
-
-    .kpi-value {
-        font-size: 1.2rem;
-    }
-
-    .kpi-icon {
-        font-size: 1.2rem;
-    }
+    /* On VERY small screens, try to keep 2 cols for charts if possible, otherwise 1 */
+    /* But user wants density. 1fr 1fr is risky but requested. */
 }
 
 .track-plays {

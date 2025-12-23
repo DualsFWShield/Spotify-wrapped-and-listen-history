@@ -302,12 +302,23 @@ function renderLink(txt) {
 function renderCharts(data) {
   Object.values(charts).forEach(c => c.destroy());
 
+  const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false, // Critical for filling the box
+    plugins: { legend: { labels: { color: COLORS.text } } }
+  };
+
   // 1. Listening Time Bar
   const mData = new Array(12).fill(0);
   data.forEach(d => mData[d.ts.getMonth()] += d.msPlayed / 36e5);
   charts.listeningTime = new Chart(document.getElementById('listeningTimeChart'), {
-    type: 'bar', data: { labels: 'JFMAMJJASOND'.split(''), datasets: [{ label: 'Hours', data: mData, backgroundColor: COLORS.primary }] },
-    options: { plugins: { legend: false }, scales: { x: { grid: { display: false } }, y: { grid: { color: '#333' } } } }
+    type: 'bar',
+    data: { labels: 'JFMAMJJASOND'.split(''), datasets: [{ label: 'Hours', data: mData, backgroundColor: COLORS.primary }] },
+    options: {
+      ...commonOptions,
+      plugins: { legend: false },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: '#333' } } }
+    }
   });
 
   // 2. Artist Doughnut (Restored)
@@ -319,7 +330,11 @@ function renderCharts(data) {
       labels: topA.map(x => x[0]),
       datasets: [{ data: topA.map(x => (x[1] / 36e5).toFixed(1)), backgroundColor: ['#1DB954', '#179443', '#116f32', '#0b4a21', '#535353'], borderWidth: 0 }]
     },
-    options: { plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } }, cutout: '60%' }
+    options: {
+      ...commonOptions,
+      plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } },
+      cutout: '60%'
+    }
   });
 
   // 3. 24h Clock (Polar Area Restored)
@@ -332,6 +347,7 @@ function renderCharts(data) {
       datasets: [{ data: hData.map(v => v / 36e5), backgroundColor: 'rgba(29, 185, 84, 0.5)', borderWidth: 1, borderColor: '#121212' }]
     },
     options: {
+      ...commonOptions,
       scales: { r: { grid: { color: '#333' }, ticks: { display: false } } },
       plugins: { legend: { display: false } }
     }
@@ -347,6 +363,7 @@ function renderCharts(data) {
       datasets: [{ label: 'Activity', data: wData.map(v => v / 36e5), borderColor: COLORS.primary, backgroundColor: 'rgba(29, 185, 84, 0.2)' }]
     },
     options: {
+      ...commonOptions,
       scales: { r: { grid: { color: '#333' }, angleLines: { color: '#333' }, pointLabels: { color: '#aaa' } } },
       plugins: { legend: { display: false } }
     }
